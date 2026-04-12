@@ -4,8 +4,8 @@ import React, { useState } from "react";
 import { PageWrapper } from "@/shared/components/layout/PageWrapper";
 import { GlitchText } from "@/shared/components/ui/GlitchText";
 import { NeonButton } from "@/shared/components/ui/NeonButton";
-import { GithubIcon, TwitterIcon, LinkedinIcon, DiscordIcon } from "@/shared/components/ui/Icons";
-import { Mail, MessageSquare, Shield, Terminal, Globe, Send } from "lucide-react";
+import { GithubIcon, LinkedinIcon, InstagramIcon } from "@/shared/components/ui/Icons";
+import { Mail, Shield, Terminal, Globe, Send, MessageSquare } from "lucide-react";
 import { motion } from "framer-motion";
 
 export default function ContactPage() {
@@ -168,14 +168,14 @@ export default function ContactPage() {
                 <ContactInfoItem 
                   icon={<Mail className="w-5 h-5" />}
                   label="COMMS_UPLINK"
-                  value="hello@socs.network"
-                  link="mailto:hello@socs.network"
+                  value="socs.club@rishihood.edu.in"
+                  link="mailto:socs.club@rishihood.edu.in"
                 />
                 <ContactInfoItem 
                   icon={<MessageSquare className="w-5 h-5" />}
                   label="SECURE_CHAT"
-                  value="discord.gg/socs-network"
-                  link="#"
+                  value="discord.gg/2DbssC8t"
+                  link="https://discord.gg/2DbssC8t"
                 />
                 <ContactInfoItem 
                   icon={<Globe className="w-5 h-5" />}
@@ -193,9 +193,9 @@ export default function ContactPage() {
                 SOCIAL_MATRIX
               </h3>
               <div className="flex flex-wrap gap-4">
-                <SocialLink icon={<GithubIcon className="w-5 h-5" />} label="GITHUB" href="#" />
-                <SocialLink icon={<TwitterIcon className="w-5 h-5" />} label="TWITTER" href="#" />
-                <SocialLink icon={<LinkedinIcon className="w-5 h-5" />} label="LINKEDIN" href="#" />
+                <SocialLink icon={<GithubIcon className="w-5 h-5" />} label="GITHUB" href="https://github.com/Society-of-Cyber-Security" />
+                <SocialLink icon={<InstagramIcon className="w-5 h-5" />} label="INSTAGRAM" href="https://www.instagram.com/socs_ru/" />
+                <SocialLink icon={<LinkedinIcon className="w-5 h-5" />} label="LINKEDIN" href="https://www.linkedin.com/company/society-of-cyber-security/posts/?feedView=all" />
               </div>
             </div>
 

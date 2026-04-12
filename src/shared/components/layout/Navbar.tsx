@@ -116,7 +116,7 @@ export function Navbar() {
             <div className="flex items-center justify-end gap-3 md:gap-4 shrink-0">
               <div className="flex items-center">
                 <NeonButton href="/login" variant="outline" className="text-[10px] md:text-[13px] px-3 md:px-6 py-1.5 md:py-2 font-black tracking-[0.15em] md:tracking-[0.2em] border-2">
-                  JOIN
+                  LOGIN
                 </NeonButton>
               </div>
 

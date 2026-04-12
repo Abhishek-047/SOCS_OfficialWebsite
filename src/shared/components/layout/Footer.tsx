@@ -1,7 +1,7 @@
 import React from "react";
 import Link from "next/link";
+import { GithubIcon, LinkedinIcon, InstagramIcon } from "@/shared/components/ui/Icons";
 import { MessageSquare } from "lucide-react";
-import { GithubIcon, TwitterIcon, LinkedinIcon } from "@/shared/components/ui/Icons";
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
@@ -27,16 +27,16 @@ export function Footer() {
               Society of Cyber Security. Uniting the elite, pushing boundaries, and securing the network. Join us and upgrade your payload.
             </p>
             <div className="flex items-center space-x-4">
-              <a href="#" className="p-2.5 border border-gray-800 bg-white/5 rounded hover:border-primary hover:text-primary text-gray-400 transition-all">
+              <a href="https://github.com/Society-of-Cyber-Security" target="_blank" rel="noopener noreferrer" className="p-2.5 border border-gray-800 bg-white/5 rounded hover:border-primary hover:text-primary text-gray-400 transition-all">
                 <GithubIcon className="w-5 h-5" />
               </a>
-              <a href="#" className="p-2.5 border border-gray-800 bg-white/5 rounded hover:border-primary hover:text-primary text-gray-400 transition-all">
-                <MessageSquare size={20} />
+              <a href="https://discord.gg/2DbssC8t" target="_blank" rel="noopener noreferrer" className="p-2.5 border border-gray-800 bg-white/5 rounded hover:border-primary hover:text-primary text-gray-400 transition-all">
+                <MessageSquare className="w-5 h-5" />
               </a>
-              <a href="#" className="p-2 border border-gray-800 bg-white/5 rounded hover:border-primary grayscale hover:grayscale-0 transition-all" title="Instagram">
-                <img src="/assets/logo.png" alt="IG" className="w-5 h-5 object-contain" />
+              <a href="https://www.instagram.com/socs_ru/" target="_blank" rel="noopener noreferrer" className="p-2.5 border border-gray-800 bg-white/5 rounded hover:border-primary hover:text-primary text-gray-400 transition-all" title="Instagram">
+                <InstagramIcon className="w-5 h-5" />
               </a>
-              <a href="#" className="p-2.5 border border-gray-800 bg-white/5 rounded hover:border-primary hover:text-primary text-gray-400 transition-all">
+              <a href="https://www.linkedin.com/company/society-of-cyber-security/posts/?feedView=all" target="_blank" rel="noopener noreferrer" className="p-2.5 border border-gray-800 bg-white/5 rounded hover:border-primary hover:text-primary text-gray-400 transition-all">
                 <LinkedinIcon className="w-5 h-5" />
               </a>
             </div>

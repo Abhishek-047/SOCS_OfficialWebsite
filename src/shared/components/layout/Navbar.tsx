@@ -49,14 +49,12 @@ export function Navbar() {
     <>
       {/* ── Standard Navbar ── */}
       <nav
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          scrolled
-            ? "bg-black/90 backdrop-blur-xl"
-            : "bg-transparent"
+        className={`fixed top-0 left-0 right-0 z-[1000000] transition-all duration-300 min-h-[64px] flex flex-col shadow-2xl ${
+          scrolled || pathname !== "/"
+            ? "bg-[#050508] backdrop-blur-md border-b border-primary/30"
+            : "bg-transparent border-b border-transparent"
         }`}
       >
-        {/* ── Main Nav Bar ── */}
-        <div className={`transition-all duration-300 ${scrolled ? "border-b border-primary/20" : "border-b border-transparent"}`}>
           <div className="w-full flex items-center justify-between px-4 md:px-12 py-3.5 md:py-4">
             {/* ── Left: Logo ── */}
             <div className="flex items-center shrink-0">
@@ -75,37 +73,25 @@ export function Navbar() {
             </div>
 
             {/* ── Center: Nav Links (Desktop) ── */}
-            <div className="hidden lg:flex items-center gap-0 flex-1 justify-center">
+            <div className="hidden lg:flex items-center gap-0 flex-1 justify-center px-2">
               {links.map((link) => {
                 const isActive = pathname === link.href;
                 return (
                   <Link
                     key={link.name}
                     href={link.href}
-                    className={`relative px-3 xl:px-6 py-2 text-[14px] xl:text-[16px] font-black font-turret tracking-[0.1em] uppercase transition-all duration-300 group ${
-                      isActive ? "text-primary" : "text-gray-500 hover:text-white"
+                    className={`relative px-2 xl:px-4 py-2 text-[12px] xl:text-[14px] font-bold font-turret tracking-[0.05em] uppercase transition-all duration-300 group ${
+                      isActive ? "text-primary" : "text-gray-400 hover:text-white"
                     }`}
                   >
                     {isActive && (
                       <motion.div
                         layoutId="nav-glow"
-                        className="absolute inset-x-0 bottom-0 top-0 z-0 bg-primary/5 border-l border-r border-primary/30"
-                        style={{
-                          backgroundImage: "radial-gradient(circle, #c8ff0011 1px, transparent 1px)",
-                          backgroundSize: "6px 6px"
-                        }}
-                      >
-                        <motion.div
-                          animate={{ y: ["-100%", "100%"] }}
-                          transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
-                          className="absolute inset-x-0 h-full bg-gradient-to-b from-transparent via-primary/10 to-transparent opacity-50"
-                        />
-                      </motion.div>
+                        className="absolute inset-x-0 bottom-0 top-0 z-0 bg-primary/5 border-l border-r border-primary/20"
+                      />
                     )}
-                    <span className="relative z-10 flex items-center transition-all duration-300 group-hover:text-primary">
-                      <span className="opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 mr-1 text-primary font-mono text-xs">[</span>
+                    <span className="relative z-10 flex items-center">
                       {link.name}
-                      <span className="opacity-0 translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 ml-1 text-primary font-mono text-xs">]</span>
                     </span>
                   </Link>
                 );
@@ -113,9 +99,9 @@ export function Navbar() {
             </div>
 
             {/* ── Right: Actions ── */}
-            <div className="flex items-center justify-end gap-3 md:gap-4 shrink-0">
-              <div className="flex items-center">
-                <NeonButton href="/login" variant="outline" className="text-[10px] md:text-[13px] px-3 md:px-6 py-1.5 md:py-2 font-black tracking-[0.15em] md:tracking-[0.2em] border-2">
+            <div className="flex items-center justify-end gap-3 md:gap-4 shrink-0 min-w-[50px]">
+              <div className="hidden sm:flex items-center">
+                <NeonButton href="/login" variant="outline" className="text-[11px] md:text-[13px] px-4 md:px-6 py-2 md:py-2.5 font-black tracking-[0.15em] md:tracking-[0.2em] border-2">
                   LOGIN
                 </NeonButton>
               </div>
@@ -123,17 +109,16 @@ export function Navbar() {
               {/* Mobile menu toggle */}
               <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="text-gray-400 hover:text-primary transition-colors p-1.5 md:p-2 lg:hidden flex items-center justify-center border border-white/5 rounded-sm bg-white/5"
+                className="flex lg:hidden text-primary hover:text-white transition-all p-2.5 items-center justify-center border-2 border-primary/20 rounded-sm bg-primary/5 active:bg-primary/20 relative z-[110]"
                 aria-label="Toggle menu"
               >
-                {isOpen ? <X className="h-4 w-4 md:h-5 md:w-5" /> : <MoreVertical className="h-4 w-4 md:h-5 md:w-5" />}
+                {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
               </button>
             </div>
           </div>
-        </div>
 
         {/* ── Hacker Ticker Bar ── */}
-        <div className="w-full bg-black/60 border-b border-primary/10 backdrop-blur-sm overflow-hidden flex items-center h-7">
+        <div className="w-full bg-[#050508] border-b border-primary/10 backdrop-blur-sm overflow-hidden flex items-center h-7">
           {/* Label */}
           <div className="flex items-center gap-2 px-4 shrink-0 border-r border-primary/20 h-full bg-primary/5">
             <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse shadow-[0_0_6px_rgba(255,0,0,0.8)]" />

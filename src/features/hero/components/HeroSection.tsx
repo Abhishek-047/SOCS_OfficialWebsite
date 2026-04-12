@@ -55,12 +55,12 @@ export function HeroSection() {
   }, []);
 
   return (
-    <section className="relative pt-4 pb-12 min-h-[85vh] flex flex-col justify-start overflow-hidden">
+    <section className="relative pt-8 md:pt-12 pb-12 min-h-[85vh] flex flex-col justify-start overflow-hidden">
       <div className="absolute inset-0 dot-grid opacity-20 -z-20" />
       <div className="absolute inset-0 motherboard-lines opacity-10 -z-20" />
 
-      <div className="grid grid-cols-1 xl:grid-cols-[1.2fr_1fr] gap-6 xl:gap-16 items-center z-10 w-full mt-4 lg:mt-10">
-        <div className="text-left w-full min-w-0 order-2 xl:order-1 flex flex-col justify-center">
+      <div className="grid grid-cols-1 lg:grid-cols-[1.2fr_1fr] gap-10 lg:gap-16 items-center z-10 w-full mt-2 md:mt-10">
+        <div className="text-left w-full min-w-0 order-2 lg:order-1 flex flex-col justify-center">
           <div className="mb-5 inline-flex items-center gap-3 px-3 py-1 bg-primary/10 border border-primary/20 text-[10px] md:text-[11px] text-primary tracking-[0.4em] md:tracking-[0.55em] font-jetbrains uppercase w-fit">
             <span className="w-2 h-2 bg-primary animate-pulse" />
             <span>Society of Cyber Security</span>
@@ -77,7 +77,7 @@ export function HeroSection() {
 
           <div ref={ctaRef} className="flex flex-col sm:flex-row gap-4 opacity-0">
             <NeonButton href="/contact" variant="primary" className="px-8 py-3.5 font-bold text-sm md:text-base">
-              Contact Us
+              Join Us
             </NeonButton>
             <NeonButton href="/projects" variant="outline" className="px-8 py-3.5 text-sm md:text-base">
               View Projects
@@ -85,7 +85,7 @@ export function HeroSection() {
           </div>
         </div>
 
-        <div ref={mapRef} className="order-1 xl:order-2 w-full h-[280px] sm:h-[400px] lg:h-[450px] xl:h-[600px] relative flex items-center justify-center opacity-0 mb-4 lg:mb-8 xl:mb-0">
+        <div ref={mapRef} className="order-1 lg:order-2 w-full h-[320px] sm:h-[450px] lg:h-[500px] xl:h-[650px] relative flex items-center justify-center opacity-0 mb-8 lg:mb-0">
           <div className="w-full h-full">
             <Globe3D />
           </div>

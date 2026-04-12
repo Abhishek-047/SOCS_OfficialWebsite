@@ -12,7 +12,7 @@ export default function ContactPage() {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
-    subject: "GENERAL_INQUIRY",
+    subject: "JOIN_CLUB",
     message: ""
   });
   const [status, setStatus] = useState<"idle" | "submitting" | "success">("idle");
@@ -20,30 +20,29 @@ export default function ContactPage() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setStatus("submitting");
-    // Simulate encryption and sending
     setTimeout(() => {
       setStatus("success");
-      setFormData({ name: "", email: "", subject: "GENERAL_INQUIRY", message: "" });
+      setFormData({ name: "", email: "", subject: "JOIN_CLUB", message: "" });
       setTimeout(() => setStatus("idle"), 5000);
     }, 2000);
   };
 
   return (
-    <PageWrapper className="pt-32 pb-20">
+    <PageWrapper className="md:pt-44 pt-32 pb-20">
       <div className="max-w-7xl mx-auto px-4">
         {/* Header */}
         <div className="mb-16">
           <div className="flex items-center gap-3 text-primary/60 font-mono text-[10px] tracking-[0.5em] uppercase mb-4">
             <span className="w-2 h-2 bg-primary animate-pulse" />
-            SIGNAL_UPLINK
+            CONTACT_US
           </div>
-          <h1 className="text-5xl md:text-7xl font-bold font-grotesk text-white tracking-tighter mb-4">
-            <GlitchText text="ESTABLISH" as="span" /> <br />
-            <span className="text-primary text-glow"><GlitchText text="CONNECTION" as="span" /></span>
+          <h1 className="text-4xl md:text-7xl font-bold font-grotesk text-white tracking-tighter mb-4">
+            <GlitchText text="GET IN" as="span" /> <br />
+            <span className="text-primary text-glow"><GlitchText text="TOUCH" as="span" /></span>
           </h1>
           <p className="max-w-2xl text-gray-400 font-jetbrains text-sm leading-relaxed uppercase tracking-wider">
-            Our encrypted channels are open for collaboration, research inquiries, and network vulnerabilities reporting. 
-            Initiate handshake protocol below.
+            Ready to secure the network or build something elite? 
+            Send us a message and we'll get back to you shortly.
           </p>
         </div>
 
@@ -59,14 +58,14 @@ export default function ContactPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 {/* Name Input */}
                 <div className="space-y-2">
-                  <label className="block text-[10px] font-mono text-gray-500 tracking-[0.3em] uppercase">OPERATOR_ALIAS</label>
+                  <label className="block text-[10px] font-mono text-gray-500 tracking-[0.3em] uppercase">NAME</label>
                   <div className="relative group">
                     <input 
                       required
                       type="text"
                       value={formData.name}
                       onChange={(e) => setFormData({...formData, name: e.target.value})}
-                      placeholder="e.g. x_hacker_01"
+                      placeholder="Your name"
                       className="w-full bg-black/40 border border-white/10 rounded-sm px-4 py-4 text-white font-mono text-sm outline-none focus:border-primary/40 focus:bg-primary/5 transition-all placeholder:text-gray-800"
                     />
                     <div className="absolute bottom-0 left-0 w-0 h-[1px] bg-primary transition-all duration-500 group-focus-within:w-full" />
@@ -75,14 +74,14 @@ export default function ContactPage() {
 
                 {/* Email Input */}
                 <div className="space-y-2">
-                  <label className="block text-[10px] font-mono text-gray-500 tracking-[0.3em] uppercase">COMM_CHANNEL (EMAIL)</label>
+                  <label className="block text-[10px] font-mono text-gray-500 tracking-[0.3em] uppercase">EMAIL</label>
                   <div className="relative group">
                     <input 
                       required
                       type="email"
                       value={formData.email}
                       onChange={(e) => setFormData({...formData, email: e.target.value})}
-                      placeholder="operator@socs.network"
+                      placeholder="your@email.com"
                       className="w-full bg-black/40 border border-white/10 rounded-sm px-4 py-4 text-white font-mono text-sm outline-none focus:border-primary/40 focus:bg-primary/5 transition-all placeholder:text-gray-800"
                     />
                     <div className="absolute bottom-0 left-0 w-0 h-[1px] bg-primary transition-all duration-500 group-focus-within:w-full" />
@@ -92,17 +91,15 @@ export default function ContactPage() {
 
               {/* Subject Select */}
               <div className="space-y-2">
-                <label className="block text-[10px] font-mono text-gray-500 tracking-[0.3em] uppercase">UPLINK_TYPE</label>
+                <label className="block text-[10px] font-mono text-gray-500 tracking-[0.3em] uppercase">SUBJECT</label>
                 <div className="relative">
                   <select 
                     value={formData.subject}
                     onChange={(e) => setFormData({...formData, subject: e.target.value})}
                     className="w-full bg-black/40 border border-white/10 rounded-sm px-4 py-4 text-white font-mono text-sm outline-none focus:border-primary/40 focus:bg-primary/5 transition-all appearance-none cursor-pointer"
                   >
-                    <option value="GENERAL_INQUIRY">GENERAL_INQUIRY</option>
-                    <option value="RECRUITMENT_PROTOCOL">RECRUITMENT_PROTOCOL</option>
-                    <option value="VULNERABILITY_REPORT">VULNERABILITY_REPORT</option>
-                    <option value="COLLABORATION_REQUEST">COLLABORATION_REQUEST</option>
+                    <option value="JOIN_CLUB">JOIN THE CLUB</option>
+                    <option value="COLLABORATION">COLLABORATION / BUSINESS</option>
                   </select>
                   <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-primary/40">▼</div>
                 </div>
@@ -110,14 +107,14 @@ export default function ContactPage() {
 
               {/* Message Input */}
               <div className="space-y-2">
-                <label className="block text-[10px] font-mono text-gray-500 tracking-[0.3em] uppercase">ENCRYPT_PAYLOAD (MESSAGE)</label>
+                <label className="block text-[10px] font-mono text-gray-500 tracking-[0.3em] uppercase">MESSAGE</label>
                 <div className="relative group">
                   <textarea 
                     required
                     rows={6}
                     value={formData.message}
                     onChange={(e) => setFormData({...formData, message: e.target.value})}
-                    placeholder="ENTER SECURE TRANSMISSION DATA..."
+                    placeholder="Tell us what's on your mind..."
                     className="w-full bg-black/40 border border-white/10 rounded-sm px-4 py-4 text-white font-mono text-sm outline-none focus:border-primary/40 focus:bg-primary/5 transition-all placeholder:text-gray-800 resize-none"
                   />
                   <div className="absolute bottom-0 left-0 w-0 h-[1px] bg-primary transition-all duration-500 group-focus-within:w-full" />
@@ -125,14 +122,14 @@ export default function ContactPage() {
               </div>
 
               {/* Submit Button */}
-              <div className="flex items-center gap-6">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6">
                 <NeonButton 
                   type="submit" 
                   disabled={status !== "idle"}
                   variant="primary" 
-                  className="px-12 py-4 font-black tracking-[0.3em] uppercase text-xs"
+                  className="w-full sm:w-auto px-12 py-4 font-black tracking-[0.3em] uppercase text-xs"
                 >
-                  {status === "idle" ? "EXECUTE_SEND" : status === "submitting" ? "ENCRYPTING..." : "TRANSMISSION_COMPLETE"}
+                  {status === "idle" ? "SEND MESSAGE" : status === "submitting" ? "SENDING..." : "SENT SUCCESS"}
                 </NeonButton>
                 
                 {status === "success" && (
@@ -147,8 +144,7 @@ export default function ContactPage() {
               </div>
             </form>
 
-            {/* Background Decorative Element */}
-            <div className="absolute -top-10 -left-10 w-40 h-40 border border-primary/5 -z-10 animate-pulse" />
+            <div className="absolute -top-10 -left-10 w-24 md:w-40 h-24 md:h-40 border border-primary/5 -z-10 animate-pulse" />
           </motion.div>
 
           {/* ── RIGHT: Contact Info ── */}
@@ -192,7 +188,7 @@ export default function ContactPage() {
                 <span className="w-1 h-6 bg-primary" />
                 SOCIAL_MATRIX
               </h3>
-              <div className="flex flex-wrap gap-4">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
                 <SocialLink icon={<GithubIcon className="w-5 h-5" />} label="GITHUB" href="https://github.com/Society-of-Cyber-Security" />
                 <SocialLink icon={<InstagramIcon className="w-5 h-5" />} label="INSTAGRAM" href="https://www.instagram.com/socs_ru/" />
                 <SocialLink icon={<LinkedinIcon className="w-5 h-5" />} label="LINKEDIN" href="https://www.linkedin.com/company/society-of-cyber-security/posts/?feedView=all" />

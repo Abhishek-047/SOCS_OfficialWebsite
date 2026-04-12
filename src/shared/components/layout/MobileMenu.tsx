@@ -21,7 +21,7 @@ export function MobileMenu({ isOpen, setIsOpen, links, pathname }: MobileMenuPro
           animate={{ x: 0 }}
           exit={{ x: "100%" }}
           transition={{ type: "spring", damping: 20, stiffness: 100 }}
-          className="fixed inset-y-0 right-0 w-full max-w-sm bg-background/95 backdrop-blur-xl border-l border-primary/30 z-40 flex flex-col pt-24 px-6 md:hidden"
+          className="fixed inset-y-0 right-0 w-full max-w-sm bg-background/95 backdrop-blur-xl border-l border-primary/30 z-[2000000] flex flex-col pt-24 px-6 lg:hidden"
         >
           <div className="flex-1 flex flex-col space-y-6">
             <div className="text-primary font-jetbrains text-sm mb-4 border-b border-primary/20 pb-2">

@@ -6,6 +6,7 @@ import { AboutSection } from "@/features/about/components/AboutSection";
 import { StatsSection } from "@/features/stats/components/StatsSection";
 import { FeaturedProjects } from "@/features/projects/components/FeaturedProjects";
 import { EventsPreview } from "@/features/events/components/EventsPreview";
+import { HomeTeamPreview } from "@/features/team/components/HomeTeamPreview";
 
 export default function Home() {
   return (
@@ -16,6 +17,7 @@ export default function Home() {
         <StatsSection />
         <FeaturedProjects />
         <EventsPreview />
+        <HomeTeamPreview />
       </div>
     </PageWrapper>
   );

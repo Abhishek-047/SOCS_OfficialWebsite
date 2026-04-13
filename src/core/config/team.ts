@@ -22,6 +22,26 @@ export const teamMembers: TeamMember[] = [
     linkedin: "#"
   },
   {
+    id: "adrash",
+    slug: "adrash",
+    name: "Adrash",
+    role: "Full Stack Dev.",
+    skills: ["React/Next.js", "Node.js", "Backend Systems"],
+    tier: "lead",
+    github: "#",
+    linkedin: "#"
+  },
+  {
+    id: "utkarsh",
+    slug: "utkarsh",
+    name: "Utkarsh",
+    role: "Full Stack Dev.",
+    skills: ["Full Stack Development", "APIs", "System Design"],
+    tier: "lead",
+    github: "#",
+    linkedin: "#"
+  },
+  {
     id: "alex",
     slug: "alex-vance",
     name: "Alex Vance",

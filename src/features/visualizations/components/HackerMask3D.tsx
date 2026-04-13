@@ -66,8 +66,8 @@ export function HackerMask3D() {
       const positions: number[] = [];
       const colors: number[] = [];
 
-      const W = 80; 
-      const H = 98; 
+      const W = 150; 
+      const H = 190; 
 
       const getZ = (x: number, y: number) => {
         const nx = Math.abs(x);
@@ -125,162 +125,7 @@ export function HackerMask3D() {
       const featurePoints = new THREE.Points(pointsGeo, pointsMat);
       hologramGroup.add(featurePoints);
 
-      // --- 4. Generate Holographic Pedestal (The "Plate/Box" part) ---
-      const pedestalPositions: number[] = [];
-      const pW = 110; 
-      const pD = 110; 
-      const pY = -70; 
-      const pThick = 12; 
-      const pDensity = 100; 
-
-      // Top and Bottom Surfaces
-      for (let i = 0; i <= pDensity; i++) {
-        for (let j = 0; j <= pDensity; j++) {
-          const px = (i / pDensity - 0.5) * pW;
-          const pz = (j / pDensity - 0.5) * pD;
-          
-          // Only show dots on edges or every Nth dot for a grid look
-          const isEdge = i === 0 || i === pDensity || j === 0 || j === pDensity;
-          const isGrid = i % 4 === 0 && j % 4 === 0;
-
-          if (isEdge || isGrid) {
-            pedestalPositions.push(px, pY, pz);           // Top face
-            pedestalPositions.push(px, pY - pThick, pz);  // Bottom face
-          }
-        }
-      }
-
-      // Vertical Edges (Pillars)
-      const pulsePoints = [
-        [-pW/2, -pD/2], [pW/2, -pD/2],
-        [-pW/2, pD/2], [pW/2, pD/2]
-      ];
-      pulsePoints.forEach(([ex, ez]) => {
-        for (let h = 0; h <= 10; h++) {
-          const hy = pY - (h / 10) * pThick;
-          pedestalPositions.push(ex, hy, ez);
-        }
-      });
-
-      // --- 5. Holographic Rig (Pillar & Projector Box) ---
-      const rigX = pW/2.2; // Left corner
-      const rigZ = -pD/2;  // Front corner
-      const rigHeight = 120; 
-      
-      // Vertical Pillar (3D Solid Bar)
-      const pS = 4; // Pillar Section Size
-      for (let h = 0; h <= 50; h++) {
-        const hy = pY + (h / 50) * rigHeight;
-        for (let i = 0; i < 3; i++) {
-          for (let j = 0; j < 3; j++) {
-             // 3x3 core dots for a thicker column look
-             const px = rigX + (i - 1.5) * pS;
-             const pz = rigZ + (j - 1.5) * pS;
-             pedestalPositions.push(px, hy, pz);
-          }
-        }
-      }
-
-      // Projector Box at Top (3D Rotated towards mask)
-      const bS = 20; // Box Size
-      const bY = pY + rigHeight;
-      const rotY = -0.9; // Turn left
-      const rotX = 0.4;  // Tilt down
-      
-      for (let i = 0; i <= 8; i++) {
-        for (let j = 0; j <= 8; j++) {
-          for (let k = 0; k <= 8; k++) {
-             if (i === 0 || i === 8 || j === 0 || j === 8 || k === 0 || k === 8) {
-                // Initial relative coords
-                let rx = (i/8 - 0.5) * bS;
-                let ry = (j/8 - 0.5) * bS;
-                let rz = (k/8 - 0.5) * bS;
-
-                // Rotate around X (Tilt down)
-                const ry1 = ry * Math.cos(rotX) - rz * Math.sin(rotX);
-                const rz1 = ry * Math.sin(rotX) + rz * Math.cos(rotX);
-                ry = ry1; rz = rz1;
-
-                // Rotate around Y (Turn left)
-                const rx2 = rx * Math.cos(rotY) + rz * Math.sin(rotY);
-                const rz2 = -rx * Math.sin(rotY) + rz * Math.cos(rotY);
-                rx = rx2; rz = rz2;
-
-                pedestalPositions.push(rigX + rx, bY + ry, rigZ + rz);
-             }
-          }
-        }
-      }
-
-      const pedestalGeo = new THREE.BufferGeometry();
-      pedestalGeo.setAttribute('position', new THREE.Float32BufferAttribute(pedestalPositions, 3));
-      
-      const pedestalMat = new THREE.PointsMaterial({
-        color: 0xc8ff00,
-        size: 1.5,
-        transparent: true,
-        opacity: 0.8,
-        blending: THREE.AdditiveBlending,
-        sizeAttenuation: true
-      });
-
-      const pedestalPoints = new THREE.Points(pedestalGeo, pedestalMat);
-      maskRoot.add(pedestalPoints);
-
-      // --- 6. Digital Light Beams (Projector Beams) ---
-      const beamDotsCount = 100;
-      const numRays = 6;
-      const beamPositions = new Float32Array(numRays * beamDotsCount * 3);
-      const beamColors = new Float32Array(numRays * beamDotsCount * 3);
-      const beamProgress = new Float32Array(numRays * beamDotsCount);
-
-      const beamTargets = [
-        new THREE.Vector3(0, 10, 0),
-        new THREE.Vector3(15, -10, 0),
-        new THREE.Vector3(-15, -10, 0),
-        new THREE.Vector3(0, -30, 0),
-        new THREE.Vector3(8, 25, 0),
-        new THREE.Vector3(-8, 25, 0)
-      ];
-
-      const beamSource = new THREE.Vector3(rigX, bY, rigZ);
-
-      for (let r = 0; r < numRays; r++) {
-        for (let i = 0; i < beamDotsCount; i++) {
-          const idx = (r * beamDotsCount + i) * 3;
-          beamProgress[r * beamDotsCount + i] = Math.random();
-          
-          const target = beamTargets[r];
-          const progress = beamProgress[r * beamDotsCount + i];
-          
-          const pos = new THREE.Vector3().lerpVectors(beamSource, target, progress);
-          beamPositions[idx] = pos.x;
-          beamPositions[idx + 1] = pos.y;
-          beamPositions[idx + 2] = pos.z;
-
-          const intensity = Math.pow(1 - progress, 2) * 0.5;
-          beamColors[idx] = colorPrimary.r * intensity;
-          beamColors[idx+1] = colorPrimary.g * intensity;
-          beamColors[idx+2] = colorPrimary.b * intensity;
-        }
-      }
-
-      const beamGeo = new THREE.BufferGeometry();
-      beamGeo.setAttribute('position', new THREE.BufferAttribute(beamPositions, 3));
-      beamGeo.setAttribute('color', new THREE.BufferAttribute(beamColors, 3));
-      
-      const beamMat = new THREE.PointsMaterial({
-        size: 0.6,
-        vertexColors: true,
-        transparent: true,
-        opacity: 0.7,
-        blending: THREE.AdditiveBlending
-      });
-
-      const beams = new THREE.Points(beamGeo, beamMat);
-      maskRoot.add(beams);
-
-      // --- Animation Loop ---
+      // --- 4. Animation Loop ---
       const render = () => {
         frameId = requestAnimationFrame(render);
         
@@ -294,35 +139,6 @@ export function HackerMask3D() {
           hologramGroup.rotation.y += 0.01;
           hologramGroup.position.y = Math.sin(time * 0.0015) * 8;
         }
-
-        // 3. Beam Animation (Scroll & Flicker)
-        const posAttr = beamGeo.getAttribute('position') as THREE.BufferAttribute;
-        for (let r = 0; r < numRays; r++) {
-          const target = beamTargets[r].clone();
-          if (hologramGroup) {
-             target.y += hologramGroup.position.y;
-          }
-
-          for (let i = 0; i < beamDotsCount; i++) {
-            const dotIdx = r * beamDotsCount + i;
-            const idx = dotIdx * 3;
-            
-            // Increment progress for scrolling
-            beamProgress[dotIdx] = (beamProgress[dotIdx] + 0.005) % 1.0;
-            const p = beamProgress[dotIdx];
-            
-            const pos = new THREE.Vector3().lerpVectors(beamSource, target, p);
-            posAttr.setXYZ(dotIdx, pos.x, pos.y, pos.z);
-            
-            // Flicker effect: slightly vary size or color intensity
-            const intensity = Math.pow(1 - p, 2) * (0.4 + Math.random() * 0.3);
-            beamColors[idx] = colorPrimary.r * intensity;
-            beamColors[idx+1] = colorPrimary.g * intensity;
-            beamColors[idx+2] = colorPrimary.b * intensity;
-          }
-        }
-        posAttr.needsUpdate = true;
-        beamGeo.getAttribute('color').needsUpdate = true;
 
         renderer.render(scene, camera);
       };

@@ -21,7 +21,7 @@ export function Terminal() {
   return (
     <div
       data-terminal
-      className="fixed"
+      className="fixed z-1000"
       style={{
         left: state.pos.x,
         top: state.pos.y,

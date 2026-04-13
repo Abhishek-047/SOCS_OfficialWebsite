@@ -21,13 +21,13 @@ export function Terminal() {
   return (
     <div
       data-terminal
-      className="fixed z-1000"
+      className="fixed"
       style={{
         left: state.pos.x,
         top: state.pos.y,
         width: state.isMinimized ? 260 : state.size.w,
         height: state.isMinimized ? "auto" : state.size.h,
-        zIndex: 100001,
+        zIndex: 3000001,
       }}
     >
       <TerminalHeader

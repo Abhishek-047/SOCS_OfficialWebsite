@@ -13,6 +13,8 @@ const MOTD = [
   "",
 ];
 
+const TERMINAL_TOP_OFFSET = 116;
+
 export function useTerminal() {
   const router = useRouter();
   const pathname = usePathname();
@@ -27,7 +29,7 @@ export function useTerminal() {
   const [input, setInput] = useState("");
   const [cmdHistory, setCmdHistory] = useState<string[]>([]);
   const [cmdHistoryIdx, setCmdHistoryIdx] = useState(-1);
-  const [pos, setPos] = useState({ x: 20, y: 80 });
+  const [pos, setPos] = useState({ x: 20, y: TERMINAL_TOP_OFFSET });
   const [size, setSize] = useState({ w: 560, h: 360 });
 
   const inputRef = useRef<HTMLInputElement>(null);
@@ -46,6 +48,15 @@ export function useTerminal() {
       inputRef.current.focus();
     }
   }, [isOpen, isMinimized]);
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    setPos((prev) => ({
+      ...prev,
+      y: Math.max(prev.y, TERMINAL_TOP_OFFSET),
+    }));
+  }, [isOpen]);
 
   // Listen for navbar event
   useEffect(() => {

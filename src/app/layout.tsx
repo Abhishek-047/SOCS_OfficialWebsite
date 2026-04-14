@@ -61,7 +61,7 @@ export default function RootLayout({
       className={`${spaceGrotesk.variable} ${manrope.variable} ${inter.variable} ${rubikGlitch.variable} ${silkscreen.variable} ${wallpoet.variable} ${turretRoad.variable} h-full antialiased dark`}
       suppressHydrationWarning
     >
-      <body className="min-h-full flex flex-col font-body bg-background text-white" suppressHydrationWarning>
+      <body className="min-h-full flex flex-col font-body bg-background text-white overflow-x-hidden" suppressHydrationWarning>
         <CustomCursor />
         <ClientProviders>
           <Navbar />

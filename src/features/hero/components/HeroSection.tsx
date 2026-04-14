@@ -60,7 +60,7 @@ export function HeroSection() {
       <div className="absolute inset-0 motherboard-lines opacity-10 -z-20" />
 
       <div className="grid grid-cols-1 lg:grid-cols-[1.2fr_1fr] gap-10 lg:gap-16 items-center z-10 w-full mt-2 md:mt-10">
-        <div className="text-left w-full min-w-0 order-2 lg:order-1 flex flex-col justify-center">
+        <div className="text-left w-full min-w-0 order-2 lg:order-1 flex flex-col justify-center md:mt-1">
           <div className="mb-5 inline-flex items-center gap-3 px-3 py-1 bg-primary/10 border border-primary/20 text-[10px] md:text-[11px] text-primary tracking-[0.4em] md:tracking-[0.55em] font-jetbrains uppercase w-fit">
             <span className="w-2 h-2 bg-primary animate-pulse" />
             <span>Society of Cyber Security</span>

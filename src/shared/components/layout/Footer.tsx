@@ -70,9 +70,8 @@ export function Footer() {
           </div>
         </div>
         
-        <div className="mt-12 pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center font-jetbrains text-xs text-gray-500">
+        <div className="mt-12 pt-8 border-t border-gray-800 flex justify-center items-center font-jetbrains text-sm text-gray-500 text-center">
           <p>© {currentYear} Society of Cyber Security. All rights reserved.</p>
-
         </div>
       </div>
     </footer>

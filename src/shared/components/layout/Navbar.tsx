@@ -130,7 +130,7 @@ export function Navbar() {
           </div>
 
         {/* ── Hacker Ticker Bar ── */}
-        <div className="w-full bg-[#050508] border-b border-primary/10 backdrop-blur-sm overflow-hidden flex items-center h-7">
+        <div className="relative w-full bg-[#050508] border-b border-primary/10 backdrop-blur-sm overflow-hidden flex items-center h-7">
           {/* Label */}
           <div className="flex items-center gap-2 px-4 shrink-0 border-r border-primary/20 h-full bg-primary/5">
             <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse shadow-[0_0_6px_rgba(255,0,0,0.8)]" />

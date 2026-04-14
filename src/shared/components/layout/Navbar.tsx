@@ -8,21 +8,25 @@ import { NeonButton } from "@/shared/components/ui/NeonButton";
 import { MobileMenu } from "./MobileMenu";
 import { X, Menu } from "lucide-react";
 
-const TICKER_ITEMS = [
-  { text: "# CTF Season 2025 registrations open — join now", href: "/events" },
-  { text: "# Zero-day discovered in OpenSSL — patch immediately", href: "/resources" },
-  { text: "# SOCS Workshop: Reverse Engineering 101 — this Saturday", href: "/events" },
-  { text: "# New malware strain targeting Indian universities detected", href: "/resources" },
-  { text: "# Bug Bounty Program launched — report vulnerabilities, earn rewards", href: "/projects" },
-  { text: "# Capture The Flag results: Team NullPtr wins Round 5", href: "/events" },
-  { text: "# Ethical hacking bootcamp — limited seats available", href: "/events" },
-  { text: "# Critical CVE-2025-0x1337 patched — update your systems", href: "/resources" },
-];
+import { projects } from "@/core/config/projects";
+import { events } from "@/core/config/events";
+
+const projectItems = projects.map(p => ({ text: `⚡ PROJECT: ${p.title}`, href: `/projects/${p.slug}` }));
+const eventItems = events.map(e => ({ text: `📅 EVENT: ${e.title} [${new Date(e.date).toLocaleDateString("en-US", {day:"numeric",month:"short"})}]`, href: `/events/${e.slug}` }));
+
+// Base feed before API loads
+const baseFeedItems: { text: string; href: string }[] = [];
+const maxLocal = Math.max(projectItems.length, eventItems.length);
+for (let i = 0; i < maxLocal; i++) {
+  if (projectItems[i]) baseFeedItems.push(projectItems[i]);
+  if (eventItems[i]) baseFeedItems.push(eventItems[i]);
+}
 
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
+  const [tickerContent, setTickerContent] = useState([...baseFeedItems, ...baseFeedItems]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -30,6 +34,40 @@ export function Navbar() {
     };
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
+    async function fetchLiveIncidents() {
+      try {
+        const response = await fetch("/api/ctfs");
+        if (!response.ok) return;
+        const data = await response.json();
+        
+        if (Array.isArray(data) && data.length > 0) {
+          const liveItems = data.map((ctf: any) => {
+            const startDate = new Date(ctf.start).toLocaleDateString("en-US", { day: "numeric", month: "short" });
+            const endDate = new Date(ctf.finish).toLocaleDateString("en-US", { day: "numeric", month: "short" });
+            return {
+              text: `⚠️ LIVE TARGET: ${ctf.title} (${ctf.format || "CTF"}) // INIT: ${startDate} - HALT: ${endDate}`,
+              href: ctf.url || ctf.ctftime_url || "#"
+            };
+          });
+          // Interleave: Project -> Event -> CTF
+          const interleaved: { text: string; href: string }[] = [];
+          const maxLength = Math.max(projectItems.length, eventItems.length, liveItems.length);
+          for (let i = 0; i < maxLength; i++) {
+            if (projectItems[i]) interleaved.push(projectItems[i]);
+            if (eventItems[i]) interleaved.push(eventItems[i]);
+            if (liveItems[i]) interleaved.push(liveItems[i]);
+          }
+          
+          setTickerContent([...interleaved, ...interleaved]);
+        }
+      } catch (err) {
+        console.error("Ticker Feed Error:", err);
+      }
+    }
+    fetchLiveIncidents();
   }, []);
 
   const links = [
@@ -42,8 +80,7 @@ export function Navbar() {
     { name: "Contact",   href: "/contact",    code: "07" },
   ];
 
-  // Duplicate items for seamless loop
-  const tickerContent = [...TICKER_ITEMS, ...TICKER_ITEMS];
+  // `tickerContent` is now handled by state directly above
 
   return (
     <>
@@ -148,18 +185,23 @@ export function Navbar() {
                 ease: "linear",
               }}
             >
-              {tickerContent.map((item, i) => (
-                <Link 
-                  key={i} 
-                  href={item.href} 
-                  className="inline-flex items-center shrink-0 whitespace-nowrap cursor-none"
-                >
-                  <span className="text-[11px] font-mono text-primary/70 px-6 tracking-wide hover:text-white transition-colors duration-200">
-                    {item.text}
-                  </span>
-                  <span className="text-primary/20 text-xs select-none">|</span>
-                </Link>
-              ))}
+              {tickerContent.map((item, i) => {
+                const isExternal = item.href.startsWith("http");
+                return (
+                  <Link 
+                    key={i} 
+                    href={item.href} 
+                    target={isExternal ? "_blank" : undefined}
+                    rel={isExternal ? "noopener noreferrer" : undefined}
+                    className="inline-flex items-center shrink-0 whitespace-nowrap cursor-none"
+                  >
+                    <span className="text-[11px] font-mono text-primary/70 px-6 tracking-wide hover:text-white transition-colors duration-200">
+                      {item.text}
+                    </span>
+                    <span className="text-primary/20 text-xs select-none">|</span>
+                  </Link>
+                );
+              })}
             </motion.div>
           </div>
 

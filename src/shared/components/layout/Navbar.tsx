@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
 import { NeonButton } from "@/shared/components/ui/NeonButton";
 import { MobileMenu } from "./MobileMenu";
-import { Menu, X, Shield, MoreVertical } from "lucide-react";
+import { X, Menu } from "lucide-react";
 
 const TICKER_ITEMS = [
   { text: "# CTF Season 2025 registrations open — join now", href: "/events" },
@@ -49,16 +49,16 @@ export function Navbar() {
     <>
       {/* ── Standard Navbar ── */}
       <nav
-        className={`fixed top-0 left-0 right-0 z-[1000000] transition-all duration-300 min-h-[64px] flex flex-col shadow-2xl ${
+        className={`fixed top-0 left-0 right-0 z-[3000000] transition-all duration-300 min-h-[64px] flex flex-col shadow-2xl ${
           scrolled || pathname !== "/"
             ? "bg-[#050508] backdrop-blur-md border-b border-primary/30"
             : "bg-transparent border-b border-transparent"
         }`}
       >
-          <div className="w-full flex items-center justify-between px-4 md:px-12 py-3.5 md:py-4">
+          <div className="w-full flex items-center justify-between gap-2 px-3 sm:px-4 md:px-12 py-3.5 md:py-4">
             {/* ── Left: Logo ── */}
             <div className="flex items-center shrink-0">
-              <Link href="/" className="flex items-center gap-3 md:gap-4 group scale-90 md:scale-100 origin-left">
+              <Link href="/" className="flex items-center gap-2 md:gap-4 group scale-85 sm:scale-90 md:scale-100 origin-left">
                 <div className="relative">
                   <span className="font-turret text-xl md:text-2xl font-black text-white tracking-[0.05em] transition-all duration-300 group-hover:text-primary">
                     SOCS
@@ -101,7 +101,17 @@ export function Navbar() {
             </div>
 
             {/* ── Right: Actions ── */}
-            <div className="flex items-center justify-end gap-3 md:gap-4 shrink-0 min-w-[50px]">
+            <div className="flex items-center justify-end gap-2 md:gap-4 shrink-0 min-w-0">
+              <div className="flex sm:hidden items-center">
+                <NeonButton
+                  href="/join"
+                  variant="outline"
+                  className="text-[8px] px-2.5 py-2 font-black tracking-[0.14em] border min-w-[72px]"
+                >
+                  JOIN
+                </NeonButton>
+              </div>
+
               <div className="hidden sm:flex items-center">
                 <NeonButton href="/login" variant="outline" className="text-[11px] md:text-[13px] px-4 md:px-6 py-2 md:py-2.5 font-black tracking-[0.15em] md:tracking-[0.2em] border-2">
                   LOGIN
@@ -111,10 +121,10 @@ export function Navbar() {
               {/* Mobile menu toggle */}
               <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="flex lg:hidden text-primary hover:text-white transition-all p-2.5 items-center justify-center border-2 border-primary/20 rounded-sm bg-primary/5 active:bg-primary/20 relative z-[110]"
+                className="flex lg:hidden text-primary hover:text-white transition-all p-2.5 items-center justify-center border-2 border-primary/20 rounded-sm bg-primary/5 active:bg-primary/20 relative z-[3000002]"
                 aria-label="Toggle menu"
               >
-                {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+                {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-5 w-5" />}
               </button>
             </div>
           </div>

@@ -70,13 +70,8 @@ export function Footer() {
           </div>
         </div>
         
-        <div className="mt-12 pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center font-jetbrains text-xs text-gray-500">
+        <div className="mt-12 pt-8 border-t border-gray-800 flex justify-center items-center font-jetbrains text-sm text-gray-500 text-center">
           <p>© {currentYear} Society of Cyber Security. All rights reserved.</p>
-          <div className="mt-2 md:mt-0 flex flex-wrap justify-center md:justify-end gap-x-4 gap-y-1 font-mono uppercase tracking-widest text-[10px]">
-            <span>FRONTEND BY <Link href="/team/abhishek" className="text-primary hover:text-white transition-colors">ABHISHEK</Link></span>
-            <span className="text-gray-800 hidden md:inline">|</span>
-            <span>BACKEND BY <Link href="/team/abhishek" className="text-primary hover:text-white transition-colors">ABHISHEK</Link></span>
-          </div>
         </div>
       </div>
     </footer>

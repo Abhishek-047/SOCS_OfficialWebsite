@@ -42,6 +42,7 @@ interface ThemeContextValue {
   setThemeBackground: (color: string) => string | null;
   setThemeFont:       (fontKey: string) => string | null;
   resetTheme:         () => void;
+  FONT_PRESETS: typeof FONT_PRESETS;
 }
 
 const ThemeContext = createContext<ThemeContextValue | null>(null);
@@ -331,6 +332,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
         setThemeBackground,
         setThemeFont,
         resetTheme,
+        FONT_PRESETS,
       }}
     >
       {children}

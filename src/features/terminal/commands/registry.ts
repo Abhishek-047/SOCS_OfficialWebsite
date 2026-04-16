@@ -82,24 +82,24 @@ export const COMMANDS: Record<string, TerminalCommand> = {
     name: "cd",
     description: "navigate to a page",
     execute: (args, { router, pathname }) => {
-      const arg = args[0]?.toLowerCase();
-      if (!arg) {
-        return [
-          { type: "error", text: "usage: cd <page>" },
-          { type: "system", text: `available: ${Object.keys(ROUTES).join(", ")}` },
-        ];
+      const arg = args[0]?.toLowerCase().replace(/^\//, "").replace(/\/$/, "");
+      
+      if (!arg || arg === "home") {
+        if (pathname === "/") return [{ type: "system", text: "already at root" }];
+        setTimeout(() => router.push("/"), 150);
+        return [{ type: "system", text: "returning to home..." }];
       }
-      const target = arg.replace(/^\//, "").replace(/\/$/, "");
-      const route = ROUTES[target];
+
+      const route = ROUTES[arg];
       if (route) {
         if (route === pathname) {
-          return [{ type: "system", text: `already at /${target}` }];
+          return [{ type: "system", text: `already at /${arg}` }];
         }
         setTimeout(() => router.push(route), 150);
-        return [{ type: "system", text: `navigating to /${target}...` }];
+        return [{ type: "system", text: `navigating to /${arg}...` }];
       }
       return [
-        { type: "error", text: `cd: no such page: ${arg}` },
+        { type: "error", text: `cd: no such directory: ${arg}` },
         { type: "system", text: `available: ${Object.keys(ROUTES).join(", ")}` },
       ];
     },

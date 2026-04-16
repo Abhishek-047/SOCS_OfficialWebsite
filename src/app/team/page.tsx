@@ -1,82 +1,16 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import { PageWrapper } from "@/shared/components/layout/PageWrapper";
-import { teamMembers, TeamMember } from "@/core/config/team";
-import { Search, User, Shield, Terminal, Globe, Zap, Activity } from "lucide-react";
-import gsap from "gsap";
-import Link from "next/link";
-
-function CollectiveCard({ member, delay }: { member: TeamMember, delay: number }) {
-  const cardRef = useRef<HTMLDivElement>(null);
-  
-  useEffect(() => {
-    gsap.fromTo(cardRef.current,
-      { opacity: 0, y: 20 },
-      { opacity: 1, y: 0, duration: 0.6, delay: delay * 0.05, ease: "power2.out" }
-    );
-  }, [delay]);
-
-  // Map tier to clearance
-  const clearanceMap = {
-    core: { label: "ADMIN", color: "bg-red-500", text: "text-red-500" },
-    lead: { label: "SENIOR", color: "bg-yellow-500", text: "text-yellow-500" },
-    member: { label: "MEMBER", color: "bg-blue-500", text: "text-blue-500" }
-  };
-
-  const clearance = clearanceMap[member.tier];
-  
-  // Generate a mock hex ID based on name length/char codes
-  const hexId = `#0X${(member.name.length * 153).toString(16).toUpperCase()}${member.name.charCodeAt(0).toString(16).toUpperCase()}`;
-
-  return (
-    <Link href={`/team/${member.slug}`} className="block h-full group">
-      <div ref={cardRef} className="dashboard-card p-6 rounded-sm border-b-2 border-b-white/5 group-hover:border-b-primary/50 transition-all opacity-0 h-full flex flex-col cursor-pointer bg-black/40 backdrop-blur-sm">
-        <div className="flex justify-between items-start mb-6">
-          <div className="relative">
-            <div className="w-16 h-16 bg-gradient-to-br from-gray-800 to-black border border-white/10 rounded-sm flex items-center justify-center overflow-hidden">
-              <User className="w-8 h-8 text-gray-600 group-hover:text-primary/40 transition-colors" />
-              <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-            </div>
-            <div className={`absolute -bottom-1 -right-1 w-3 h-3 ${clearance.color} rounded-sm shadow-[0_0_8px_rgba(255,255,255,0.2)]`}></div>
-          </div>
-          
-          <div className="text-right">
-            <div className={`text-[9px] font-bold tracking-widest ${clearance.text} uppercase mb-1`}>CLEARANCE: {clearance.label}</div>
-            <div className="text-[10px] text-gray-500 font-mono tracking-tighter">ID: {hexId}</div>
-          </div>
-        </div>
-
-        <div className="flex-grow">
-          <h3 className="text-white font-bold font-grotesk text-xl tracking-tight mb-1 uppercase group-hover:text-primary transition-colors">
-            <GlitchText text={member.name.replace(" ", "_")} />
-          </h3>
-          <p className="text-[10px] text-primary/60 font-jetbrains tracking-widest uppercase mb-4">
-            {member.role.replace(" ", "_")}
-          </p>
-        </div>
-
-        <div className="mt-auto pt-4 border-t border-white/5 flex justify-between items-center">
-          <div className="flex gap-2 opacity-30 group-hover:opacity-100 transition-opacity">
-            <Globe className="w-3 h-3 text-gray-500" />
-            <Terminal className="w-3 h-3 text-gray-500" />
-            <Zap className="w-3 h-3 text-gray-500" />
-          </div>
-          <div className="text-[8px] text-gray-700 font-mono uppercase tracking-tighter group-hover:text-primary/40 transition-colors">
-            NODE_ACCESS_GRANTED
-          </div>
-        </div>
-      </div>
-    </Link>
-  );
-}
+import { teamMembers } from "@/core/config/team";
+import { Search, Activity, Globe, LayoutGrid, Network } from "lucide-react";
 
 import { GlitchText } from "@/shared/components/ui/GlitchText";
 import { NetworkGraph } from "@/features/visualizations/components/NetworkGraph";
 import { EncryptedText } from "@/shared/components/ui/EncryptedText";
 import { HoneypotLink } from "@/shared/components/ui/HoneypotLink";
 import { AddEntityModal } from "@/shared/components/modals/AddEntityModal";
-import { LayoutGrid, Network } from "lucide-react";
+import { CollectiveCard } from "@/features/team/components/CollectiveCard";
 
 export default function TeamPage() {
   const [viewMode, setViewMode] = useState<"GRID_VIEW" | "NETWORK_VIEW">("GRID_VIEW");

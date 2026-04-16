@@ -6,23 +6,27 @@ import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
 import { NeonButton } from "@/shared/components/ui/NeonButton";
 import { MobileMenu } from "./MobileMenu";
-import { Menu, X, Shield, MoreVertical } from "lucide-react";
+import { X, Menu } from "lucide-react";
 
-const TICKER_ITEMS = [
-  { text: "# CTF Season 2025 registrations open — join now", href: "/events" },
-  { text: "# Zero-day discovered in OpenSSL — patch immediately", href: "/resources" },
-  { text: "# SOCS Workshop: Reverse Engineering 101 — this Saturday", href: "/events" },
-  { text: "# New malware strain targeting Indian universities detected", href: "/resources" },
-  { text: "# Bug Bounty Program launched — report vulnerabilities, earn rewards", href: "/projects" },
-  { text: "# Capture The Flag results: Team NullPtr wins Round 5", href: "/events" },
-  { text: "# Ethical hacking bootcamp — limited seats available", href: "/events" },
-  { text: "# Critical CVE-2025-0x1337 patched — update your systems", href: "/resources" },
-];
+import { projects } from "@/core/config/projects";
+import { events } from "@/core/config/events";
+
+const projectItems = projects.map(p => ({ text: `⚡ PROJECT: ${p.title}`, href: `/projects/${p.slug}` }));
+const eventItems = events.map(e => ({ text: `📅 EVENT: ${e.title} [${new Date(e.date).toLocaleDateString("en-US", {day:"numeric",month:"short"})}]`, href: `/events/${e.slug}` }));
+
+// Base feed before API loads
+const baseFeedItems: { text: string; href: string }[] = [];
+const maxLocal = Math.max(projectItems.length, eventItems.length);
+for (let i = 0; i < maxLocal; i++) {
+  if (projectItems[i]) baseFeedItems.push(projectItems[i]);
+  if (eventItems[i]) baseFeedItems.push(eventItems[i]);
+}
 
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
+  const [tickerContent, setTickerContent] = useState([...baseFeedItems, ...baseFeedItems]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -30,6 +34,40 @@ export function Navbar() {
     };
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
+    async function fetchLiveIncidents() {
+      try {
+        const response = await fetch("/api/ctfs");
+        if (!response.ok) return;
+        const data = await response.json();
+        
+        if (Array.isArray(data) && data.length > 0) {
+          const liveItems = data.map((ctf: any) => {
+            const startDate = new Date(ctf.start).toLocaleDateString("en-US", { day: "numeric", month: "short" });
+            const endDate = new Date(ctf.finish).toLocaleDateString("en-US", { day: "numeric", month: "short" });
+            return {
+              text: `⚠️ LIVE TARGET: ${ctf.title} (${ctf.format || "CTF"}) // INIT: ${startDate} - HALT: ${endDate}`,
+              href: ctf.url || ctf.ctftime_url || "#"
+            };
+          });
+          // Interleave: Project -> Event -> CTF
+          const interleaved: { text: string; href: string }[] = [];
+          const maxLength = Math.max(projectItems.length, eventItems.length, liveItems.length);
+          for (let i = 0; i < maxLength; i++) {
+            if (projectItems[i]) interleaved.push(projectItems[i]);
+            if (eventItems[i]) interleaved.push(eventItems[i]);
+            if (liveItems[i]) interleaved.push(liveItems[i]);
+          }
+          
+          setTickerContent([...interleaved, ...interleaved]);
+        }
+      } catch (err) {
+        console.error("Ticker Feed Error:", err);
+      }
+    }
+    fetchLiveIncidents();
   }, []);
 
   const links = [
@@ -42,23 +80,22 @@ export function Navbar() {
     { name: "Contact",   href: "/contact",    code: "07" },
   ];
 
-  // Duplicate items for seamless loop
-  const tickerContent = [...TICKER_ITEMS, ...TICKER_ITEMS];
+  // `tickerContent` is now handled by state directly above
 
   return (
     <>
       {/* ── Standard Navbar ── */}
       <nav
-        className={`fixed top-0 left-0 right-0 z-[1000000] transition-all duration-300 min-h-[64px] flex flex-col shadow-2xl ${
+        className={`fixed top-0 left-0 right-0 z-[3000000] transition-all duration-300 min-h-[64px] flex flex-col shadow-2xl ${
           scrolled || pathname !== "/"
             ? "bg-[#050508] backdrop-blur-md border-b border-primary/30"
             : "bg-transparent border-b border-transparent"
         }`}
       >
-          <div className="w-full flex items-center justify-between px-4 md:px-12 py-3.5 md:py-4">
+          <div className="w-full flex items-center justify-between gap-2 px-3 sm:px-4 md:px-12 py-3.5 md:py-4">
             {/* ── Left: Logo ── */}
             <div className="flex items-center shrink-0">
-              <Link href="/" className="flex items-center gap-3 md:gap-4 group scale-90 md:scale-100 origin-left">
+              <Link href="/" className="flex items-center gap-2 md:gap-4 group scale-85 sm:scale-90 md:scale-100 origin-left">
                 <div className="relative">
                   <span className="font-turret text-xl md:text-2xl font-black text-white tracking-[0.05em] transition-all duration-300 group-hover:text-primary">
                     SOCS
@@ -101,7 +138,17 @@ export function Navbar() {
             </div>
 
             {/* ── Right: Actions ── */}
-            <div className="flex items-center justify-end gap-3 md:gap-4 shrink-0 min-w-[50px]">
+            <div className="flex items-center justify-end gap-2 md:gap-4 shrink-0 min-w-0">
+              <div className="flex sm:hidden items-center">
+                <NeonButton
+                  href="/join"
+                  variant="outline"
+                  className="text-[8px] px-2.5 py-2 font-black tracking-[0.14em] border min-w-[72px]"
+                >
+                  JOIN
+                </NeonButton>
+              </div>
+
               <div className="hidden sm:flex items-center">
                 <NeonButton href="/login" variant="outline" className="text-[11px] md:text-[13px] px-4 md:px-6 py-2 md:py-2.5 font-black tracking-[0.15em] md:tracking-[0.2em] border-2">
                   LOGIN
@@ -111,16 +158,16 @@ export function Navbar() {
               {/* Mobile menu toggle */}
               <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="flex lg:hidden text-primary hover:text-white transition-all p-2.5 items-center justify-center border-2 border-primary/20 rounded-sm bg-primary/5 active:bg-primary/20 relative z-[110]"
+                className="flex lg:hidden text-primary hover:text-white transition-all p-2.5 items-center justify-center border-2 border-primary/20 rounded-sm bg-primary/5 active:bg-primary/20 relative z-[3000002]"
                 aria-label="Toggle menu"
               >
-                {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+                {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-5 w-5" />}
               </button>
             </div>
           </div>
 
         {/* ── Hacker Ticker Bar ── */}
-        <div className="w-full bg-[#050508] border-b border-primary/10 backdrop-blur-sm overflow-hidden flex items-center h-7">
+        <div className="relative w-full bg-[#050508] border-b border-primary/10 backdrop-blur-sm overflow-hidden flex items-center h-7">
           {/* Label */}
           <div className="flex items-center gap-2 px-4 shrink-0 border-r border-primary/20 h-full bg-primary/5">
             <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse shadow-[0_0_6px_rgba(255,0,0,0.8)]" />
@@ -138,18 +185,23 @@ export function Navbar() {
                 ease: "linear",
               }}
             >
-              {tickerContent.map((item, i) => (
-                <Link 
-                  key={i} 
-                  href={item.href} 
-                  className="inline-flex items-center shrink-0 whitespace-nowrap cursor-none"
-                >
-                  <span className="text-[11px] font-mono text-primary/70 px-6 tracking-wide hover:text-white transition-colors duration-200">
-                    {item.text}
-                  </span>
-                  <span className="text-primary/20 text-xs select-none">|</span>
-                </Link>
-              ))}
+              {tickerContent.map((item, i) => {
+                const isExternal = item.href.startsWith("http");
+                return (
+                  <Link 
+                    key={i} 
+                    href={item.href} 
+                    target={isExternal ? "_blank" : undefined}
+                    rel={isExternal ? "noopener noreferrer" : undefined}
+                    className="inline-flex items-center shrink-0 whitespace-nowrap cursor-none"
+                  >
+                    <span className="text-[11px] font-mono text-primary/70 px-6 tracking-wide hover:text-white transition-colors duration-200">
+                      {item.text}
+                    </span>
+                    <span className="text-primary/20 text-xs select-none">|</span>
+                  </Link>
+                );
+              })}
             </motion.div>
           </div>
 

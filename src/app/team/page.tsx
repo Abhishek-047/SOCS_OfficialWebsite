@@ -3,17 +3,15 @@
 import React, { useState } from "react";
 import { PageWrapper } from "@/shared/components/layout/PageWrapper";
 import { teamMembers } from "@/core/config/team";
-import { Search, Activity, Globe, LayoutGrid, Network } from "lucide-react";
+import { Search, Activity, Globe } from "lucide-react";
 
 import { GlitchText } from "@/shared/components/ui/GlitchText";
-import { NetworkGraph } from "@/features/visualizations/components/NetworkGraph";
 import { EncryptedText } from "@/shared/components/ui/EncryptedText";
 import { HoneypotLink } from "@/shared/components/ui/HoneypotLink";
 import { AddEntityModal } from "@/shared/components/modals/AddEntityModal";
 import { CollectiveCard } from "@/features/team/components/CollectiveCard";
 
 export default function TeamPage() {
-  const [viewMode, setViewMode] = useState<"GRID_VIEW" | "NETWORK_VIEW">("GRID_VIEW");
   const [isModalOpen, setIsModalOpen] = useState(false);
   
   const filteredMembers = teamMembers;
@@ -40,10 +38,6 @@ export default function TeamPage() {
                 <Activity className="w-3 h-3" />
                 <EncryptedText>SOCS_COLLECTIVE_DIRECTORY</EncryptedText>
               </div>
-              <div className="flex items-center gap-3 text-[10px] text-primary/60 font-jetbrains tracking-[0.3em] uppercase">
-                <Globe className="w-3 h-3 text-primary animate-pulse" />
-                <span><EncryptedText>NODE_NETWORK_DIRECTORY_v3.0.4</EncryptedText></span>
-              </div>
             </div>
             
             <div className="mt-6">
@@ -63,26 +57,9 @@ export default function TeamPage() {
             
 
             <div className="flex w-full lg:w-auto mt-2 lg:mt-0 gap-3">
-              <div className="flex gap-1 border border-white/10 p-1 bg-black/40 rounded-sm">
-                <button
-                  onClick={() => setViewMode("GRID_VIEW")}
-                  title="Grid View"
-                  className={`flex-1 lg:flex-none p-2 flex justify-center items-center rounded-sm transition-colors ${viewMode === "GRID_VIEW" ? "bg-primary/20 text-primary" : "text-gray-500 hover:text-white"}`}
-                >
-                  <LayoutGrid className="w-4 h-4" />
-                </button>
-                <button
-                  onClick={() => setViewMode("NETWORK_VIEW")}
-                  title="Network Relational Graph View"
-                  className={`flex-1 lg:flex-none p-2 flex justify-center items-center rounded-sm transition-colors ${viewMode === "NETWORK_VIEW" ? "bg-primary/20 text-primary" : "text-gray-500 hover:text-white"}`}
-                >
-                  <Network className="w-4 h-4" />
-                </button>
-              </div>
-
               <button 
                 onClick={() => setIsModalOpen(true)}
-                className="flex items-center gap-2 bg-primary/10 border border-primary/20 px-4 py-2 text-[10px] font-bold tracking-[0.2em] text-primary hover:bg-primary hover:text-black transition-all duration-300 group"
+                className="flex items-center gap-2 bg-primary/10 border border-primary/20 px-6 py-2.5 text-[10px] font-bold tracking-[0.2em] text-primary hover:bg-primary hover:text-black transition-all duration-300 group"
                 style={{ clipPath: "polygon(0 8px, 8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%)" }}
               >
                 <span className="group-hover:rotate-90 transition-transform">+</span>
@@ -93,26 +70,11 @@ export default function TeamPage() {
         </div>
 
         {/* Directory Presentation */}
-        {viewMode === "GRID_VIEW" ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {filteredMembers.map((member, i) => (
-              <CollectiveCard key={member.slug} member={member} delay={i} />
-            ))}
-          </div>
-        ) : (
-          <div className="w-full h-[650px] border border-white/10 bg-[#030508]/80 rounded-sm relative overflow-hidden">
-             <div className="absolute top-4 left-4 z-10 hidden md:block">
-               <div className="text-[10px] text-primary/60 font-mono tracking-widest uppercase mb-2">GRAPH_LEGEND</div>
-               <div className="flex flex-col gap-2 text-[9px] font-jetbrains text-gray-400">
-                 <div className="flex items-center gap-2"><div className="w-2 h-2 rounded-full bg-[#ff0040]"></div> SOCS MAINFRAME</div>
-                 <div className="flex items-center gap-2"><div className="w-2 h-2 rounded-full bg-[#ff2d55]"></div> CORE / ADMIN</div>
-                 <div className="flex items-center gap-2"><div className="w-2 h-2 rounded-full bg-[#ff6b00]"></div> LEAD</div>
-                 <div className="flex items-center gap-2"><div className="w-2 h-2 rounded-full bg-primary/80"></div> MEMBER</div>
-               </div>
-             </div>
-             <NetworkGraph />
-          </div>
-        )}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          {filteredMembers.map((member, i) => (
+            <CollectiveCard key={member.slug} member={member} delay={i} />
+          ))}
+        </div>
 
         {/* Floating Footer Detail */}
         <div className="mt-20 pt-8 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-4 text-[8px] text-gray-700 font-mono tracking-widest uppercase text-center md:text-left">
